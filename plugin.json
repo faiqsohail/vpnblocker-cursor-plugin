@@ -1,0 +1,24 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "vpnblocker",
+  "version": "0.1.0",
+  "description": "Check whether an IPv4/IPv6 address belongs to a VPN, proxy, or hosting organization using the VPN Blocker API (vpnblocker.net). Works on the free tier with no API key.",
+  "author": {
+    "name": "faiqsohail",
+    "url": "https://vpnblocker.net"
+  },
+  "homepage": "https://vpnblocker.net",
+  "repository": "https://github.com/faiqsohail/vpnblocker-cursor-plugin",
+  "license": "MIT",
+  "keywords": [
+    "vpn",
+    "proxy",
+    "hosting",
+    "datacenter",
+    "ip",
+    "ip-reputation",
+    "fraud",
+    "security",
+    "mcp"
+  ]
+}

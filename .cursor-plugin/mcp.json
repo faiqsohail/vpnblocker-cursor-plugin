@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "vpnblocker": {
+      "command": "node",
+      "args": [
+        "${CURSOR_PLUGIN_ROOT}/server/index.mjs"
+      ],
+      "cwd": "${CURSOR_PLUGIN_ROOT}"
+    }
+  }
+}
