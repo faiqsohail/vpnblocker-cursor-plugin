@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "vpnblocker",
-  "version": "0.1.0",
-  "description": "Check whether an IPv4/IPv6 address belongs to a VPN, proxy, or hosting organization using the VPN Blocker API (vpnblocker.net). Works on the free tier with no API key.",
+  "version": "0.2.0",
+  "description": "Check whether an IPv4/IPv6 address belongs to a VPN, proxy, or hosting organization using the VPN Blocker API (vpnblocker.net). Free API key with 10,000 lookups a month.",
   "author": {
     "name": "faiqsohail",
     "url": "https://vpnblocker.net"

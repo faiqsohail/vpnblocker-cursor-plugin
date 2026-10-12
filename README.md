@@ -17,9 +17,9 @@ Ships as both an [Agent Plugin](https://agent-plugins.org) (root `plugin.json` +
 
 ## Configuration
 
-No API key is needed: the Free package allows 500 lookups per month, and each response includes `remaining_requests`.
+An API key is required for every lookup. [Create a free account](https://dashboard.vpnblocker.net/signup) to get a free key (10,000 lookups a month), then set the `VPNBLOCKER_API_KEY` environment variable to it before launching Cursor. Keys look like `vpb_` followed by 32 letters and numbers. The server sends the key as the `X-API-KEY` header, and without one the tool returns an error and sends no request. Never commit keys.
 
-For higher limits or the extra location fields (`hostname`, `country`, `city`, etc.), set the `VPNBLOCKER_API_KEY` environment variable to a Basic or Professional key from [vpnblocker.net](https://vpnblocker.net) before launching Cursor. The server sends it as the `X-API-KEY` header. Never commit keys.
+Paid plans (Basic, Professional, Business, Enterprise) raise the monthly limit. Professional and above also return `hostname` and geolocation fields. See [Monthly limits](https://vpnblocker.net/docs/#monthly-limits).
 
 ## Response fields
 
@@ -28,13 +28,16 @@ For higher limits or the extra location fields (`hostname`, `country`, `city`, e
 | `host-ip` | `true` if the IP belongs to a VPN, proxy, or hosting organization |
 | `org` | Organization that owns the IP |
 | `ipaddress` | The IP that was checked |
-| `package` | `Free`, `Basic`, or `Professional` |
-| `remaining_requests` | Monthly lookups left (Free package) |
+| `package` | `Free`, `Basic`, `Professional`, `Business`, or `Enterprise` |
+| `remaining_requests` | Monthly lookups left for this key (all plans) |
+| `hostname`, `country`, `subdivision`, `city`, `postal`, `location` | Professional, Business, and Enterprise only |
+
+The tool also reports the `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset`, `X-VPNBlocker-Plan`, and (on 429) `Retry-After` headers as a `rate limit:` line.
 
 ## Test locally
 
 ```sh
-node scripts/smoke.mjs 8.8.8.8
+VPNBLOCKER_API_KEY=vpb_... node scripts/smoke.mjs 8.8.8.8
 ```
 
 To try it in Cursor, copy this folder to `~/.cursor/plugins/local/vpnblocker` and run **Developer: Reload Window**.

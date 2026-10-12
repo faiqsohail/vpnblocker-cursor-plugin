@@ -1,10 +1,12 @@
 // Drives server/index.mjs over stdio with real JSON-RPC and prints every response.
+// Lookups need VPNBLOCKER_API_KEY (free key: https://dashboard.vpnblocker.net/signup).
 import { spawn } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const ips = process.argv.slice(2);
+if (!process.env.VPNBLOCKER_API_KEY) console.error("note: VPNBLOCKER_API_KEY is not set, so lookups will return the no-key error");
 const child = spawn("node", ["./server/index.mjs"], { cwd: root, stdio: ["pipe", "pipe", "inherit"] });
 
 const msgs = [

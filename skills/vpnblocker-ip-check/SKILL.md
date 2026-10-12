@@ -17,28 +17,34 @@ Do not use it for domain names, hostnames, or CIDR ranges: the tool accepts exac
 
 `vpnblocker_check_ip({ ip })` returns the VPN Blocker JSON response as-is.
 
-Fields returned on the Free package (no API key):
+It needs the `VPNBLOCKER_API_KEY` environment variable (free keys: https://dashboard.vpnblocker.net/signup). Without it the tool returns an error and sends no request.
+
+Fields returned on every plan:
 
 - `status`: `"success"` on a successful lookup.
-- `package`: `"Free"`, `"Basic"`, or `"Professional"`.
-- `remaining_requests`: monthly lookups left (Free package only).
+- `package`: `"Free"`, `"Basic"`, `"Professional"`, `"Business"`, or `"Enterprise"`.
+- `remaining_requests`: monthly lookups left for this key.
 - `ipaddress`: the IP that was checked.
 - `host-ip`: `true` when the IP belongs to a VPN, proxy, or hosting organization; `false` otherwise.
 - `org`: the organization that owns the IP.
 
-Professional keys also return `hostname`, `country`, `subdivison` (spelled that way by the API), `city`, `postal`, and `location`. Only report these when they are present in the response.
+Professional, Business, and Enterprise keys also return `hostname`, `country` (`name`, `code`), `subdivision` (`name`, `code`), `city`, `postal`, and `location` (`lat`, `long`; both `0` when unknown). Any of these can be `null`. Only report them when they are present.
+
+A `rate limit:` line follows the JSON with the key's monthly `limit`, `remaining`, `reset` time, and `plan`.
 
 ## How to report results
 
 - Lead with the verdict: `host-ip: true` means VPN, proxy, or hosting. The API does not say which of the three, so don't claim one.
 - Name the `org`.
 - Treat `host-ip: true` as a signal, not proof of abuse: public DNS resolvers, CDNs, and cloud servers are all hosting IPs.
-- On the Free package, mention `remaining_requests` when it is low. The Free package has a monthly cap. Don't spend lookups on bulk scans unless the user asks for one.
+- Mention `remaining_requests` when it is low. Every key has a monthly cap. Don't spend lookups on bulk scans unless the user asks for one.
 
 ## Errors
 
 - Invalid IP: the tool refuses before calling the API.
-- HTTP 401: the `VPNBLOCKER_API_KEY` is invalid or expired.
-- HTTP 429: the Free monthly limit has been reached.
+- No key: the tool refuses before calling the API and links to the free signup.
+- HTTP 401: the key is invalid, revoked, not paid for yet, overdue, or suspended. The API's `msg` says which.
+- HTTP 406: the API rejected the IP as invalid.
+- HTTP 429: the key's monthly limit has been reached. Relay `retry_after_seconds` / `reset` from the rate limit line.
 
 Relay the error. Don't guess a verdict.
